@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copilot CLI: Slash Commands & Agentic Workflows</title>
+    <style>
+        :root {
+            --neon-blue: #00ffff;
+            --neon-pink: #ff00ff;
+            --neon-green: #00ff00;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --text-light: #ffffff;
+            --text-dim: #cccccc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
+            color: var(--text-light);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            width: 90%;
+            max-width: 1200px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid var(--neon-blue);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 0 20px var(--neon-blue),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            color: var(--neon-green);
+            text-shadow: 0 0 8px var(--neon-green);
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            color: var(--neon-blue);
+            text-shadow: 0 0 6px var(--neon-blue);
+            margin-bottom: 1rem;
+        }
+
+        p, li {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--neon-green);
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green);
+        }
+
+        .highlight {
+            color: var(--neon-pink);
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--neon-pink);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .feature-card {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: var(--neon-blue);
+            font-size: 1rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+            margin: 0 0.2em;
+        }
+
+        ul {
+            text-align: left;
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--neon-blue);
+        }
+
+        th, td {
+            border: 1px solid var(--neon-blue);
+            padding: 0.8rem;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(0, 255, 255, 0.2);
+            color: var(--neon-blue);
+            font-weight: bold;
+        }
+
+        .glow-text {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px currentColor; }
+            to { text-shadow: 0 0 20px currentColor; }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .slide {
+                width: 95%;
+                padding: 1rem;
+            }
+            
+            .navigation {
+                bottom: 10px;
+            }
+            
+            .nav-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .code-block {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slide-counter">
+            <span id="current-slide">1</span> / <span id="total-slides">15</span>
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1 class="glow-text">🚀 Copilot CLI</h1>
+            <h2>Slash Commands & Agentic Workflows</h2>
+            <h3>The Future of Development is Here</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🤖 AI-Powered</h3>
+                    <p>Natural language meets powerful automation</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Slash Commands</h3>
+                    <p>Predictable, powerful, always consistent</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔄 Agentic Workflows</h3>
+                    <p>Background agents that actually work</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: What is Copilot CLI? -->
+        <div class="slide">
+            <h2>🤖 What is Copilot CLI?</h2>
+            <h3>Your AI Development Partner</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>💬 Conversational Interface</h3>
+                    <p>Talk to your tools naturally</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Slash Commands</h3>
+                    <p>Predictable, powerful actions</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🤖 Agentic Workflows</h3>
+                    <p>Work in the background</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💾 Session Persistence</h3>
+                    <p>Never lose context</p>
+                </div>
+            </div>
+            <div class="code-block">copilot> /help
+# Welcome to the future of development</div>
+        </div>
+
+        <!-- Slide 3: Slash Commands Overview -->
+        <div class="slide">
+            <h2>⚡ Slash Commands Overview</h2>
+            <h3>Predictable Power at Your Fingertips</h3>
+            <ul>
+                <li><span class="highlight">Always work the same way</span> - no syntax variations</li>
+                <li><span class="highlight">Discoverable</span> - tab completion shows options</li>
+                <li><span class="highlight">Composable</span> - chain them together</li>
+                <li><span class="highlight">Reliable</span> - consistent behavior every time</li>
+            </ul>
+            <div class="code-block">copilot> /model gpt-4
+copilot> /add-dir /src/components
+copilot> /fleet "optimize these React components"</div>
+            <p><span class="highlight">The Magic:</span> Natural language + structured commands = unlimited power</p>
+        </div>
+
+        <!-- Slide 4: Session Management -->
+        <div class="slide">
+            <h2>🎯 Session Management</h2>
+            <h3>Control Your Context</h3>
+            <div class="code-block">/clear           # Fresh start, clear conversation
+/session save    # Bookmark your current context  
+/session load    # Resume where you left off
+/resume          # Quick context restoration
+/exit            # Clean shutdown</div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>💾 Save Before Changes</h3>
+                    <p>Bookmark important contexts</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔄 Resume Complex Sessions</h3>
+                    <p>Pick up where you left off</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🆕 Clear for New Projects</h3>
+                    <p>Fresh start when switching</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: File & Directory Access -->
+        <div class="slide">
+            <h2>📁 File & Directory Access</h2>
+            <h3>Your Codebase, Instantly Available</h3>
+            <div class="code-block">/add-dir /src/components    # Add directory to context
+/add-dir /tests --recursive # Include subdirectories  
+/list-dirs                  # See what's loaded
+/cwd /project/frontend      # Change working directory
+/remove-dir /old-code       # Clean up context</div>
+            <ul>
+                <li>🎯 <span class="highlight">Only loads what you need</span></li>
+                <li>🚫 <span class="highlight">Respects .gitignore</span> by default</li>
+                <li>⚡ <span class="highlight">Blazing fast</span> file operations</li>
+                <li>🔄 <span class="highlight">Automatic change detection</span></li>
+            </ul>
+        </div>
+
+        <!-- Slide 6: Configuration -->
+        <div class="slide">
+            <h2>⚙️ Configuration That Works</h2>
+            <h3>Customize Your Experience</h3>
+            <div class="code-block">/model claude-3.5-sonnet    # Switch AI models
+/model --list               # See available options
+
+/theme neon-cyber           # Visual styling
+/theme dark-minimal         # Clean interface
+
+/terminal-setup            # Optimize shell integration
+/terminal-setup --zsh      # Shell-specific config</div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>✅ Sane Defaults</h3>
+                    <p>Works great out of the box</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎨 Easy Customization</h3>
+                    <p>When you need it</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📁 Per-Project Overrides</h3>
+                    <p>Different configs for different projects</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Agentic Workflows -->
+        <div class="slide">
+            <h2>🤖 Agentic Workflows</h2>
+            <h3>The Game Changer</h3>
+            <div class="code-block">/fleet "refactor these 10 components"
+# → Spawns parallel agents for each component
+
+/delegate "research best practices for React hooks"  
+# → Background research while you keep coding
+
+/research --deep "compare state management solutions"
+# → Deep investigation with expert analysis</div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>⚡ Parallel Processing</h3>
+                    <p>Multiple tasks simultaneously</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔄 Background Execution</h3>
+                    <p>Doesn't block your work</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎯 Expert-Level Analysis</h3>
+                    <p>On demand, when you need it</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Fleet -->
+        <div class="slide">
+            <h2>⚡ Fleet - Parallel Powerhouse</h2>
+            <h3>Divide and Conquer</h3>
+            <div class="code-block">copilot> /fleet "optimize these API endpoints"
+🚀 Spawning 5 agents for parallel optimization...
+  
+Agent 1: /api/users → Response time improved 40%
+Agent 2: /api/posts → Added caching layer  
+Agent 3: /api/auth → Reduced DB queries by 60%
+Agent 4: /api/files → Implemented streaming
+Agent 5: /api/search → Added proper indexing
+
+✅ All optimizations complete in 3 minutes</div>
+            <p><span class="highlight">Perfect For:</span> Code reviews, refactoring, testing approaches, batch operations</p>
+        </div>
+
+        <!-- Slide 9: Delegate -->
+        <div class="slide">
+            <h2>🎯 Delegate - Background Brilliance</h2>
+            <h3>Work While You Work</h3>
+            <div class="code-block">copilot> /delegate "research GraphQL vs tRPC for our API rewrite"
+
+# You continue coding...
+# Meanwhile, agent researches in background
+
+[30 minutes later]
+🔔 Research Complete: GraphQL vs tRPC Analysis Ready
+📊 Comprehensive comparison with recommendations</div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🔍 Research While You Code</h3>
+                    <p>Background investigation</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📚 Documentation Generation</h3>
+                    <p>Automatic docs creation</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔒 Security Audits</h3>
+                    <p>Continuous security analysis</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Research -->
+        <div class="slide">
+            <h2>🔬 Research - Deep Investigation</h2>
+            <h3>Expert-Level Analysis</h3>
+            <div class="code-block">/research --deep "microservices architecture patterns"
+
+📋 Research Plan:
+1. Industry best practices analysis
+2. Performance benchmarks
+3. Cost-benefit analysis  
+4. Implementation roadmap
+5. Risk assessment
+
+🎯 Estimated completion: 45 minutes</div>
+            <ul>
+                <li>🔍 <span class="highlight">Multi-source analysis</span></li>
+                <li>🎯 <span class="highlight">Expert recommendations</span></li>
+                <li>💡 <span class="highlight">Actionable insights</span></li>
+                <li>📚 <span class="highlight">Referenced documentation</span></li>
+            </ul>
+        </div>
+
+        <!-- Slide 11: Advanced Capabilities -->
+        <div class="slide">
+            <h2>🚀 Advanced Capabilities</h2>
+            <h3>Enterprise-Ready Features</h3>
+            <div class="code-block"># MCP Connections
+/connect database-mcp     # Connect to database tools
+/connect cloud-mcp        # Cloud service integration  
+/list-connections         # See active MCPs
+
+# Tool Permissions
+/allow-all               # Trust all tools (use carefully)
+/permissions --list      # Review current permissions
+/revoke tool-name        # Remove tool access</div>
+            <p><span class="highlight">Advanced Workflows:</span> Custom integrations, API orchestration, cross-service automation</p>
+        </div>
+
+        <!-- Slide 12: Practical Examples -->
+        <div class="slide">
+            <h2>💡 Practical Workflow Examples</h2>
+            <h3>Real-World Patterns</h3>
+            <div class="code-block"># Research → Delegate Pattern
+/research "React state management 2024"
+/delegate "create Redux toolkit setup with TypeScript"
+# Both complete in background
+
+# Fleet for Parallel Work
+/fleet "add TypeScript types to these components"
+/fleet "add unit tests for these utilities"  
+/fleet "update documentation for these APIs"</div>
+            <p><span class="highlight">Result:</span> Maximum productivity through intelligent task distribution</p>
+        </div>
+
+        <!-- Slide 13: Why This Matters -->
+        <div class="slide">
+            <h2>🎯 Why This Matters</h2>
+            <h3>The Productivity Multiplier</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Before Copilot CLI</h3>
+                    <ul>
+                        <li>Manual context switching</li>
+                        <li>Fragmented tool usage</li>
+                        <li>Sequential task processing</li>
+                        <li>Limited AI assistance</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h3>After Copilot CLI</h3>
+                    <ul>
+                        <li class="highlight">⚡ 10x faster research</li>
+                        <li class="highlight">🔄 Parallel processing</li>
+                        <li class="highlight">🎯 Zero context loss</li>
+                        <li class="highlight">🚀 Compound productivity</li>
+                    </ul>
+                </div>
+            </div>
+            <p><span class="highlight glow-text">You focus on architecture and creativity, AI handles the grunt work.</span></p>
+        </div>
+
+        <!-- Slide 14: Getting Started -->
+        <div class="slide">
+            <h2>🚀 Getting Started</h2>
+            <h3>Quick Reference</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Usage</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>/help</td><td>Get started</td><td>Show available commands</td></tr>
+                        <tr><td>/model</td><td>/model gpt-4</td><td>Switch AI models</td></tr>
+                        <tr><td>/add-dir</td><td>/add-dir /src</td><td>Add code to context</td></tr>
+                        <tr><td>/fleet</td><td>/fleet "task"</td><td>Parallel execution</td></tr>
+                        <tr><td>/delegate</td><td>/delegate "research X"</td><td>Background work</td></tr>
+                        <tr><td>/research</td><td>/research --deep "topic"</td><td>Expert analysis</td></tr>
+                        <tr><td>/session save</td><td>Save context</td><td>Preserve your work</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="code-block">copilot> /help
+copilot> /add-dir /your-project
+copilot> /fleet "analyze code quality"</div>
+        </div>
+
+        <!-- Slide 15: The Future is Now -->
+        <div class="slide">
+            <h1 class="glow-text">🌟 The Future is Now</h1>
+            <h2>Ready to Transform Your Workflow?</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>1️⃣ Install</h3>
+                    <p>Copilot CLI</p>
+                </div>
+                <div class="feature-card">
+                    <h3>2️⃣ Run</h3>
+                    <p><code>/help</code> to explore</p>
+                </div>
+                <div class="feature-card">
+                    <h3>3️⃣ Try</h3>
+                    <p>A simple fleet command</p>
+                </div>
+                <div class="feature-card">
+                    <h3>4️⃣ Experience</h3>
+                    <p>The productivity boost</p>
+                </div>
+            </div>
+            <div class="code-block">🔗 GitHub: github.com/copilot-cli
+📚 Docs: docs.copilot-cli.dev  
+💬 Community: discord.gg/copilot-cli</div>
+            <h2 class="glow-text">🚀 Welcome to the future of development!</h2>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            } else if (e.key === 'Home') {
+                showSlide(0);
+            } else if (e.key === 'End') {
+                showSlide(totalSlides - 1);
+            }
+        });
+
+        // Touch navigation for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 100;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide(); // Swipe left - next slide
+                } else {
+                    previousSlide(); // Swipe right - previous slide
+                }
+            }
+        }
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
