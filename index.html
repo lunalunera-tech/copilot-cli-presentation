@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Copilot CLI: Principles & Workflows</title>
+    
+    <!-- Agentic Dark Theme Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Reset and Base Styles */
+        /* Reset and Base Styles - Agentic Dark Theme */
         * {
             margin: 0;
             padding: 0;
@@ -13,12 +17,13 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             line-height: 1.6;
-            color: #1a1a1a;
-            background-color: #ffffff;
+            color: #e2e8f0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             overflow: hidden;
             font-size: 16px;
+            font-weight: 400;
         }
 
         /* Presentation Container */
@@ -28,6 +33,7 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         }
 
         /* Slide Container */
@@ -45,44 +51,95 @@
             width: 100%;
             display: none;
             text-align: center;
+            background: rgba(139, 92, 246, 0.15);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .slide.active {
             display: block;
+            animation: slideIn 0.5s ease-out;
         }
 
-        /* Typography Hierarchy */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Typography Hierarchy - Agentic Dark Theme */
         h1 {
-            font-size: clamp(1.75rem, 4vw, 3rem);
-            font-weight: 600;
-            color: #000000;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: #e2e8f0;
             margin-bottom: 1.5rem;
             line-height: 1.2;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
         }
 
         h2 {
-            font-size: clamp(1.5rem, 3.5vw, 2.5rem);
-            font-weight: 600;
-            color: #000000;
+            font-size: clamp(1.75rem, 4vw, 2.75rem);
+            font-weight: 700;
+            color: #a78bfa;
             margin-bottom: 1.25rem;
             line-height: 1.3;
+            position: relative;
         }
 
         h3 {
-            font-size: clamp(1.25rem, 3vw, 2rem);
-            font-weight: 500;
-            color: #333333;
+            font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+            font-weight: 600;
+            color: #c4b5fd;
             margin-bottom: 1rem;
             line-height: 1.4;
         }
 
         p, li {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            color: #444444;
+            font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+            color: #e2e8f0;
             margin-bottom: 0.75rem;
             max-width: 65ch;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        /* Decorative Star Separators */
+        .star-separator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+            color: #6366f1;
+            font-size: 1.5rem;
+            gap: 1rem;
+        }
+
+        .star-separator::before,
+        .star-separator::after {
+            content: "✦ · ✦ · ✦";
+            opacity: 0.7;
+        }
+
+        /* Section Numbers */
+        .section-number {
+            position: absolute;
+            top: -1rem;
+            left: 2rem;
+            background: linear-gradient(135deg, #a78bfa, #6366f1);
+            color: #1a1a2e;
+            font-weight: 700;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
         }
 
         /* Lists */
@@ -90,42 +147,82 @@
             text-align: left;
             max-width: 600px;
             margin: 0 auto;
+            list-style: none;
+            padding: 0;
         }
 
         li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             margin-left: 0;
             margin-right: 0;
+            position: relative;
+            padding-left: 1.5rem;
         }
 
-        /* Code and Commands */
-        code {
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-            background-color: #f5f5f5;
-            padding: 0.2em 0.4em;
-            border-radius: 3px;
-            font-size: 0.9em;
-            color: #000000;
+        li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #a78bfa;
+            font-weight: bold;
         }
 
+        /* Command Styling */
         .command {
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-            font-size: clamp(1.1rem, 2.8vw, 1.5rem);
-            color: #000000;
-            background-color: #f8f8f8;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            margin: 1rem auto;
-            display: inline-block;
-            border: 1px solid #e0e0e0;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #6366f1;
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem auto;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: clamp(0.875rem, 2vw, 1rem);
+            color: #a78bfa;
+            max-width: 600px;
+            position: relative;
+            overflow-x: auto;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
         }
 
-        /* Principle Numbers */
-        .principle-number {
-            font-size: clamp(2rem, 5vw, 4rem);
+        .command::before {
+            content: "$";
+            color: #6366f1;
+            margin-right: 0.5rem;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem auto;
+            max-width: 700px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        th {
+            background: rgba(139, 92, 246, 0.3);
             font-weight: 700;
-            color: #666666;
-            margin-bottom: 1rem;
+            color: #e2e8f0;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.875em;
+            color: #c4b5fd;
+            border: 1px solid rgba(99, 102, 241, 0.3);
         }
 
         /* Navigation */
@@ -135,268 +232,284 @@
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            align-items: center;
             gap: 1rem;
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 0.75rem 1.5rem;
-            border-radius: 30px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e0e0e0;
+            z-index: 1000;
         }
 
-        .nav-button {
-            width: 44px;
-            height: 44px;
+        .nav-btn {
+            background: rgba(139, 92, 246, 0.8);
+            color: #1a1a2e;
             border: none;
-            background-color: #f5f5f5;
-            color: #333333;
-            border-radius: 50%;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.2s ease;
-        }
-
-        .nav-button:hover {
-            background-color: #e0e0e0;
-        }
-
-        .nav-button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .nav-button:disabled:hover {
-            background-color: #f5f5f5;
-        }
-
-        .slide-counter {
-            font-size: 0.9rem;
-            color: #666666;
-            font-weight: 500;
-            min-width: 60px;
-        }
-
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-size: clamp(0.9rem, 2.2vw, 1.1rem);
-        }
-
-        th, td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        th {
+            font-family: inherit;
             font-weight: 600;
-            color: #000000;
-            background-color: #f8f8f8;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.3);
         }
 
-        td {
-            color: #444444;
+        .nav-btn:hover {
+            background: #a78bfa;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(0, 0, 0, 0.6);
+            color: #e2e8f0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            z-index: 1000;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .slide {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
             .slide-container {
                 padding: 1rem;
             }
 
             .navigation {
                 bottom: 1rem;
+                gap: 0.5rem;
+            }
+
+            .nav-btn {
                 padding: 0.5rem 1rem;
+                font-size: 0.8rem;
             }
 
-            table {
-                font-size: 0.85rem;
+            .slide-counter {
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
             }
 
-            th, td {
-                padding: 0.5rem 0.25rem;
+            .section-number {
+                top: -0.5rem;
+                left: 1rem;
+                padding: 0.25rem 0.75rem;
+                font-size: 0.75rem;
             }
         }
 
         @media (max-width: 480px) {
-            .slide-container {
-                padding: 0.75rem;
-            }
-
-            h1, h2, h3 {
-                text-align: left;
-            }
-
-            .slide {
-                text-align: left;
-            }
-
             .command {
-                font-size: 1rem;
-                padding: 0.5rem 1rem;
+                font-size: 0.75rem;
+                padding: 0.75rem 1rem;
+            }
+
+            table {
+                font-size: 0.875rem;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
             }
         }
 
-        /* Print Styles */
-        @media print {
-            body {
-                background: white;
-                font-size: 12pt;
-                line-height: 1.4;
-            }
-
-            .navigation {
-                display: none;
-            }
-
-            .slide {
-                display: block !important;
-                page-break-after: always;
-                margin-bottom: 2rem;
-                padding: 1rem;
-            }
-
-            .slide:last-child {
-                page-break-after: auto;
-            }
-
-            h1, h2, h3 {
-                color: black;
-            }
-
-            .command {
-                background: #f0f0f0;
-                border: 1px solid #ccc;
-            }
-        }
-
-        /* Accessibility */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* High Contrast Support */
+        /* High contrast mode support */
         @media (prefers-contrast: high) {
             body {
-                background: white;
-                color: black;
+                background: #000000;
+                color: #ffffff;
             }
 
-            .nav-button {
-                border: 2px solid black;
+            .slide {
+                background: rgba(255, 255, 255, 0.1);
+                border: 2px solid #ffffff;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            .slide.active {
+                animation: none;
             }
 
-            .command {
-                border: 2px solid black;
+            .nav-btn:hover {
+                transform: none;
             }
+        }
+
+        /* Focus management for accessibility */
+        .nav-btn:focus,
+        .slide:focus {
+            outline: 3px solid #a78bfa;
+            outline-offset: 3px;
+        }
+
+        /* Glow effects for technical feel */
+        h1, h2 {
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #a78bfa, transparent);
+            border-radius: 2px;
+        }
+
+        /* Subtle animation for code blocks */
+        .command {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .command::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.1), transparent);
+            animation: scan 3s infinite;
+        }
+
+        @keyframes scan {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
         }
     </style>
 </head>
+
 <body>
-    <div class="presentation" role="main">
+    <div class="presentation">
+        <div class="slide-counter">
+            <span id="current-slide">1</span> / <span id="total-slides">15</span>
+        </div>
+
         <div class="slide-container">
             <!-- Slide 1: Title -->
             <div class="slide active" id="slide-1">
-                <h1>Copilot CLI: Principles & Workflows</h1>
-                <p>A practical guide to agentic development patterns</p>
+                <div class="section-number">01</div>
+                <h1>Copilot CLI</h1>
+                <h3>Principles & Workflows</h3>
+                <div class="star-separator"></div>
+                <p>Exploring agentic development patterns with GitHub Copilot CLI</p>
             </div>
 
             <!-- Slide 2: Accessibility & Clarity -->
             <div class="slide" id="slide-2">
-                <div class="principle-number">01</div>
-                <h2>Accessibility & Clarity of Slash Commands</h2>
-                <p>Commands should be self-documenting and discoverable</p>
-                <div class="command">/help [command]</div>
+                <div class="section-number">02</div>
+                <h2>Accessibility & Clarity</h2>
+                <p>Building for everyone, optimizing for understanding</p>
+                <div class="star-separator"></div>
                 <ul>
-                    <li>Clear, consistent naming conventions</li>
-                    <li>Built-in help and examples</li>
-                    <li>Predictable parameter patterns</li>
-                    <li>Graceful error handling with suggestions</li>
+                    <li>WCAG AAA compliant interfaces</li>
+                    <li>Mobile-first responsive design (320px+)</li>
+                    <li>High contrast ratios and readable typography</li>
+                    <li>Clear error messages and user feedback</li>
+                    <li>Keyboard navigation and screen reader support</li>
                 </ul>
             </div>
 
             <!-- Slide 3: Shipping Velocity -->
             <div class="slide" id="slide-3">
-                <div class="principle-number">02</div>
-                <h2>Shipping Velocity Matters</h2>
-                <p>Speed of iteration trumps perfection</p>
-                <div class="command">/quick-deploy --env staging</div>
+                <div class="section-number">03</div>
+                <h2>Shipping Velocity</h2>
+                <p>Move fast without breaking things</p>
+                <div class="command">gh copilot suggest "optimize deployment pipeline"</div>
                 <ul>
-                    <li>Default to safe, fast actions</li>
-                    <li>Minimize confirmation prompts</li>
-                    <li>Optimize for common workflows</li>
-                    <li>Enable rapid prototyping and testing</li>
+                    <li>Automated testing and continuous integration</li>
+                    <li>Feature flags for safe rollouts</li>
+                    <li>Instant feedback loops</li>
+                    <li>Zero-downtime deployments</li>
                 </ul>
             </div>
 
             <!-- Slide 4: Humans on the Loop -->
             <div class="slide" id="slide-4">
-                <div class="principle-number">03</div>
-                <h2>Humans on the Loop, Agents in the Loop</h2>
-                <p>Strategic oversight with tactical automation</p>
-                <div class="command">/review --auto-assign</div>
+                <div class="section-number">04</div>
+                <h2>Humans on the Loop</h2>
+                <p>AI amplifies human judgment, doesn't replace it</p>
+                <div class="command">gh copilot explain --interactive</div>
                 <ul>
-                    <li>Human approval for critical decisions</li>
-                    <li>Agents handle routine execution</li>
-                    <li>Clear escalation paths</li>
-                    <li>Audit trails for all actions</li>
+                    <li>AI suggests, humans decide</li>
+                    <li>Context-aware recommendations</li>
+                    <li>Learning from human feedback</li>
+                    <li>Maintaining creative control</li>
                 </ul>
             </div>
 
             <!-- Slide 5: Token Economics -->
             <div class="slide" id="slide-5">
-                <div class="principle-number">04</div>
-                <h2>Tokens Are Cheaper Than People</h2>
-                <p>Leverage AI for tasks that scale with attention</p>
-                <div class="command">/analyze --depth comprehensive</div>
+                <div class="section-number">05</div>
+                <h2>Token Economics</h2>
+                <p>Optimize for both speed and cost efficiency</p>
+                <div class="command">gh copilot config set token-limit 8000</div>
                 <ul>
-                    <li>Automate repetitive analysis</li>
-                    <li>Generate first drafts and outlines</li>
-                    <li>Batch process similar tasks</li>
-                    <li>Focus human time on creative decisions</li>
+                    <li>Smart context windowing</li>
+                    <li>Efficient prompt engineering</li>
+                    <li>Batch processing for repetitive tasks</li>
+                    <li>Local caching strategies</li>
                 </ul>
             </div>
 
             <!-- Slide 6: Fleet Patterns -->
             <div class="slide" id="slide-6">
-                <h2>/fleet: Parallelization Patterns</h2>
-                <p>Distribute work across multiple agents simultaneously</p>
-                <div class="command">/fleet deploy --services api,web,worker</div>
+                <div class="section-number">06</div>
+                <h2>/fleet: Parallel Execution Patterns</h2>
+                <p>Coordinate multiple AI agents for complex tasks</p>
+                <div class="command">/fleet test --parallel --coverage<br>/fleet lint --fix --all-files</div>
                 <ul>
-                    <li>Parallel execution reduces total time</li>
-                    <li>Independent agent contexts prevent conflicts</li>
-                    <li>Aggregated results and status reporting</li>
-                    <li>Fault isolation and recovery</li>
+                    <li>Distributed task execution</li>
+                    <li>Load balancing across agents</li>
+                    <li>Aggregated results and reporting</li>
+                    <li>Fault tolerance and retry mechanisms</li>
                 </ul>
             </div>
 
             <!-- Slide 7: Delegate Workflows -->
             <div class="slide" id="slide-7">
-                <h2>/delegate: Background Agent Workflows</h2>
-                <p>Hand off complex tasks to specialized agents</p>
-                <div class="command">/delegate code-review --pr 123</div>
+                <div class="section-number">07</div>
+                <h2>/delegate: Specialized Agent Assignment</h2>
+                <p>Route tasks to domain experts</p>
+                <div class="command">/delegate security --audit<br>/delegate performance --optimize</div>
                 <ul>
-                    <li>Asynchronous task execution</li>
-                    <li>Specialized agent capabilities</li>
-                    <li>Progress notifications and updates</li>
-                    <li>Result delivery when complete</li>
+                    <li>Task-specific agent specialization</li>
+                    <li>Domain expertise routing</li>
+                    <li>Quality gates and validation</li>
+                    <li>Human oversight integration</li>
                 </ul>
             </div>
 
             <!-- Slide 8: Research Workflows -->
             <div class="slide" id="slide-8">
-                <h2>/research: Deep Investigation with Citations</h2>
-                <p>Comprehensive analysis with source tracking</p>
-                <div class="command">/research security-vulnerabilities --codebase</div>
+                <div class="section-number">08</div>
+                <h2>/research: Information Synthesis</h2>
+                <p>Deep analysis and knowledge extraction</p>
+                <div class="command">/research architecture --best-practices<br>/research security --vulnerabilities</div>
                 <ul>
                     <li>Multi-source information gathering</li>
                     <li>Citation tracking and verification</li>
@@ -407,6 +520,7 @@
 
             <!-- Slide 9: Task Orchestration -->
             <div class="slide" id="slide-9">
+                <div class="section-number">09</div>
                 <h2>/tasks: Monitoring and Orchestration</h2>
                 <p>Coordinate complex multi-step workflows</p>
                 <div class="command">/tasks status --pipeline ci-cd</div>
@@ -420,6 +534,7 @@
 
             <!-- Slide 10: Practical Examples -->
             <div class="slide" id="slide-10">
+                <div class="section-number">10</div>
                 <h2>Practical Examples</h2>
                 <p>Real-world workflow combinations</p>
                 <div class="command">/fleet test --parallel<br>/delegate documentation --auto<br>/research performance --benchmark</div>
@@ -433,7 +548,9 @@
 
             <!-- Slide 11: Quick Reference -->
             <div class="slide" id="slide-11">
+                <div class="section-number">11</div>
                 <h2>Quick Reference</h2>
+                <div class="star-separator"></div>
                 <table>
                     <thead>
                         <tr>
@@ -450,23 +567,18 @@
                         </tr>
                         <tr>
                             <td><code>/delegate</code></td>
-                            <td>Background tasks</td>
-                            <td>Single specialized agent</td>
+                            <td>Specialized tasks</td>
+                            <td>Domain experts</td>
                         </tr>
                         <tr>
                             <td><code>/research</code></td>
                             <td>Deep analysis</td>
-                            <td>Research-focused agent</td>
+                            <td>Information synthesis</td>
                         </tr>
                         <tr>
                             <td><code>/tasks</code></td>
                             <td>Orchestration</td>
-                            <td>Workflow coordinator</td>
-                        </tr>
-                        <tr>
-                            <td><code>/monitor</code></td>
-                            <td>Status tracking</td>
-                            <td>Continuous observation</td>
+                            <td>Workflow coordination</td>
                         </tr>
                     </tbody>
                 </table>
@@ -474,178 +586,193 @@
 
             <!-- Slide 12: Getting Started -->
             <div class="slide" id="slide-12">
+                <div class="section-number">12</div>
                 <h2>Getting Started</h2>
+                <p>Your first steps into agentic workflows</p>
+                <div class="command">gh extension install github/gh-copilot<br>gh copilot config</div>
                 <ul>
-                    <li><strong>Start Simple:</strong> Begin with single commands</li>
-                    <li><strong>Build Workflows:</strong> Chain commands for complex tasks</li>
-                    <li><strong>Set Boundaries:</strong> Define approval gates for critical actions</li>
-                    <li><strong>Monitor Results:</strong> Review and refine agent outputs</li>
-                    <li><strong>Scale Gradually:</strong> Add parallelization as confidence grows</li>
+                    <li><strong>Install:</strong> Add the Copilot CLI extension</li>
+                    <li><strong>Configure:</strong> Set up your preferences and limits</li>
+                    <li><strong>Experiment:</strong> Start with simple commands</li>
+                    <li><strong>Scale:</strong> Gradually adopt complex workflows</li>
                 </ul>
-                <div class="command">/help getting-started</div>
             </div>
 
             <!-- Slide 13: Why This Matters -->
             <div class="slide" id="slide-13">
+                <div class="section-number">13</div>
                 <h2>Why This Matters</h2>
-                <h3>Productivity Multiplier</h3>
+                <p>The future of development is collaborative</p>
+                <div class="star-separator"></div>
                 <ul>
-                    <li><strong>10x Developer:</strong> Not just faster coding, but faster thinking</li>
-                    <li><strong>Reduced Context Switching:</strong> Agents maintain focus while you strategize</li>
-                    <li><strong>Quality Consistency:</strong> Automated best practices and reviews</li>
-                    <li><strong>Knowledge Scaling:</strong> Capture and replicate expert workflows</li>
-                    <li><strong>Error Reduction:</strong> Systematic validation and testing</li>
+                    <li><strong>Productivity:</strong> Focus on high-value creative work</li>
+                    <li><strong>Quality:</strong> Consistent patterns and fewer errors</li>
+                    <li><strong>Learning:</strong> AI as a teaching and mentoring tool</li>
+                    <li><strong>Accessibility:</strong> Lowering barriers to complex tasks</li>
+                    <li><strong>Innovation:</strong> Rapid prototyping and experimentation</li>
                 </ul>
             </div>
 
             <!-- Slide 14: Call to Action -->
             <div class="slide" id="slide-14">
-                <h2>Start Building</h2>
-                <p>Your next project begins with a command</p>
-                <div class="command">/delegate setup --project new-app</div>
+                <div class="section-number">14</div>
+                <h2>Call to Action</h2>
+                <p>Start building with agentic patterns today</p>
+                <div class="command">gh copilot suggest "create my first agent workflow"</div>
                 <ul>
-                    <li>Identify your most time-consuming workflows</li>
-                    <li>Start with one automated task</li>
-                    <li>Measure the time savings</li>
-                    <li>Gradually expand agent capabilities</li>
-                    <li>Share patterns with your team</li>
+                    <li>Try one command in your current project</li>
+                    <li>Document your workflows and share learnings</li>
+                    <li>Contribute to the community knowledge base</li>
+                    <li>Experiment with new patterns and combinations</li>
                 </ul>
             </div>
 
             <!-- Slide 15: Thank You -->
             <div class="slide" id="slide-15">
+                <div class="section-number">15</div>
                 <h1>Thank You</h1>
-                <h3>Questions?</h3>
-                <p>Ready to transform your development workflow</p>
-                <div class="command">/fleet questions --parallel</div>
+                <div class="star-separator"></div>
+                <p>Questions? Let's discuss agentic workflows and the future of development</p>
+                <div class="command">gh copilot explain "How can I get started with agent patterns?"</div>
             </div>
         </div>
 
-        <!-- Navigation -->
-        <nav class="navigation" role="navigation" aria-label="Slide navigation">
-            <button class="nav-button" id="prev-btn" onclick="changeSlide(-1)" aria-label="Previous slide">‹</button>
-            <div class="slide-counter" id="slide-counter" role="status" aria-live="polite">1 / 15</div>
-            <button class="nav-button" id="next-btn" onclick="changeSlide(1)" aria-label="Next slide">›</button>
-        </nav>
+        <div class="navigation">
+            <button class="nav-btn" id="prev-btn" onclick="previousSlide()">← Previous</button>
+            <button class="nav-btn" id="next-btn" onclick="nextSlide()">Next →</button>
+        </div>
     </div>
 
     <script>
         let currentSlide = 1;
         const totalSlides = 15;
 
-        function updateSlide() {
-            // Hide all slides
-            document.querySelectorAll('.slide').forEach(slide => {
-                slide.classList.remove('active');
-            });
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            const current = document.getElementById('current-slide');
             
-            // Show current slide
+            if (n > totalSlides) currentSlide = totalSlides;
+            if (n < 1) currentSlide = 1;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
             document.getElementById(`slide-${currentSlide}`).classList.add('active');
             
-            // Update counter
-            document.getElementById('slide-counter').textContent = `${currentSlide} / ${totalSlides}`;
+            current.textContent = currentSlide;
             
-            // Update button states
+            // Update navigation buttons
             document.getElementById('prev-btn').disabled = currentSlide === 1;
             document.getElementById('next-btn').disabled = currentSlide === totalSlides;
-            
-            // Update URL hash for bookmarking
-            window.location.hash = `slide-${currentSlide}`;
         }
 
-        function changeSlide(direction) {
-            const newSlide = currentSlide + direction;
-            if (newSlide >= 1 && newSlide <= totalSlides) {
-                currentSlide = newSlide;
-                updateSlide();
-            }
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
         }
 
         // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            switch(e.key) {
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                    changeSlide(-1);
-                    break;
-                case 'ArrowRight':
-                case 'ArrowDown':
-                case ' ': // Spacebar
-                    e.preventDefault();
-                    changeSlide(1);
-                    break;
-                case 'Home':
-                    currentSlide = 1;
-                    updateSlide();
-                    break;
-                case 'End':
-                    currentSlide = totalSlides;
-                    updateSlide();
-                    break;
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                currentSlide = 1;
+                showSlide(currentSlide);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                currentSlide = totalSlides;
+                showSlide(currentSlide);
             }
         });
-
-        // Initialize from URL hash
-        function initializeFromHash() {
-            const hash = window.location.hash;
-            const slideMatch = hash.match(/slide-(\d+)/);
-            if (slideMatch) {
-                const slideNum = parseInt(slideMatch[1]);
-                if (slideNum >= 1 && slideNum <= totalSlides) {
-                    currentSlide = slideNum;
-                }
-            }
-            updateSlide();
-        }
 
         // Touch/swipe support
-        let touchStartX = 0;
-        let touchEndX = 0;
+        let startX = 0;
+        let startY = 0;
 
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
+        document.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
         });
 
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const swipeDistance = touchEndX - touchStartX;
+        document.addEventListener('touchend', function(e) {
+            if (!startX || !startY) return;
             
-            if (Math.abs(swipeDistance) > swipeThreshold) {
-                if (swipeDistance > 0) {
-                    changeSlide(-1); // Swipe right = previous
+            let endX = e.changedTouches[0].clientX;
+            let endY = e.changedTouches[0].clientY;
+            
+            let deltaX = startX - endX;
+            let deltaY = startY - endY;
+            
+            // Horizontal swipe threshold
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                if (deltaX > 0) {
+                    nextSlide(); // Swipe left - next slide
                 } else {
-                    changeSlide(1);  // Swipe left = next
+                    previousSlide(); // Swipe right - previous slide
                 }
+            }
+            
+            startX = 0;
+            startY = 0;
+        });
+
+        // Initialize
+        showSlide(1);
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        // Focus management for accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab' && !e.shiftKey) {
+                // Ensure tab navigation works within slides
+                const activeSlide = document.querySelector('.slide.active');
+                const focusableElements = activeSlide.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                
+                if (focusableElements.length === 0) {
+                    e.preventDefault();
+                    document.getElementById('next-btn').focus();
+                }
+            }
+        });
+
+        // Announce slide changes for screen readers
+        function announceSlide() {
+            const activeSlide = document.querySelector('.slide.active');
+            const heading = activeSlide.querySelector('h1, h2');
+            if (heading) {
+                const announcement = `Slide ${currentSlide} of ${totalSlides}: ${heading.textContent}`;
+                
+                // Create or update announcement element
+                let announcer = document.getElementById('slide-announcer');
+                if (!announcer) {
+                    announcer = document.createElement('div');
+                    announcer.id = 'slide-announcer';
+                    announcer.setAttribute('aria-live', 'polite');
+                    announcer.style.position = 'absolute';
+                    announcer.style.left = '-10000px';
+                    announcer.style.width = '1px';
+                    announcer.style.height = '1px';
+                    announcer.style.overflow = 'hidden';
+                    document.body.appendChild(announcer);
+                }
+                
+                announcer.textContent = announcement;
             }
         }
 
-        // Initialize presentation
-        document.addEventListener('DOMContentLoaded', initializeFromHash);
-
-        // Handle browser back/forward
-        window.addEventListener('hashchange', initializeFromHash);
-
-        // Focus management for accessibility
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Tab') {
-                // Ensure navigation stays focusable
-                const navigation = document.querySelector('.navigation');
-                const focusableElements = navigation.querySelectorAll('button:not(:disabled)');
-                
-                if (document.activeElement === focusableElements[focusableElements.length - 1] && !e.shiftKey) {
-                    e.preventDefault();
-                    focusableElements[0].focus();
-                } else if (document.activeElement === focusableElements[0] && e.shiftKey) {
-                    e.preventDefault();
-                    focusableElements[focusableElements.length - 1].focus();
-                }
-            }
-        });
+        // Call announce function when slide changes
+        const originalShowSlide = showSlide;
+        showSlide = function(n) {
+            originalShowSlide(n);
+            setTimeout(announceSlide, 100);
+        };
     </script>
 </body>
 </html>
