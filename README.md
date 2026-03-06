@@ -4,7 +4,7 @@ A comprehensive mobile-optimized presentation about Copilot CLI's powerful slash
 
 ## 🚀 Live Presentation
 
-[View the live presentation here](https://lunalunera-tech.github.io/copilot-cli-presentation/)
+[View the live presentation here](https://andreagriffiths11.github.io/copilot-cli-presentation/)
 
 ## 📋 Content Overview
 
