@@ -3,18 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Copilot CLI: Slash Commands & Agentic Workflows</title>
+    <title>Copilot CLI: Principles & Workflows</title>
     <style>
-        :root {
-            --neon-blue: #00ffff;
-            --neon-pink: #ff00ff;
-            --neon-green: #00ff00;
-            --dark-bg: #0a0a0a;
-            --darker-bg: #050505;
-            --text-light: #ffffff;
-            --text-dim: #cccccc;
-        }
-
+        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -22,863 +13,639 @@
         }
 
         body {
-            font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 100%);
-            color: var(--text-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background-color: #ffffff;
             overflow: hidden;
-            position: relative;
-            min-height: 100vh;
+            font-size: 16px;
         }
 
-        /* Mobile-first animated background grid */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: clamp(20px, 8vw, 50px) clamp(20px, 8vw, 50px);
-            animation: gridMove 20s linear infinite;
-            z-index: -1;
-        }
-
-        @keyframes gridMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(clamp(20px, 8vw, 50px), clamp(20px, 8vw, 50px)); }
-        }
-
-        .presentation-container {
+        /* Presentation Container */
+        .presentation {
             width: 100vw;
             height: 100vh;
             display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Slide Container */
+        .slide-container {
+            flex: 1;
+            display: flex;
             align-items: center;
             justify-content: center;
+            padding: 2rem;
             position: relative;
-            padding: clamp(0.5rem, 2vw, 1rem);
         }
 
         .slide {
-            display: none;
+            max-width: 800px;
             width: 100%;
-            max-width: min(100%, 1200px);
-            padding: clamp(1rem, 4vw, 2rem);
+            display: none;
             text-align: center;
-            border: 2px solid var(--neon-blue);
-            border-radius: clamp(5px, 2vw, 10px);
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            box-shadow: 
-                0 0 clamp(10px, 3vw, 20px) var(--neon-blue),
-                inset 0 0 clamp(10px, 3vw, 20px) rgba(0, 255, 255, 0.1);
-            animation: slideIn 0.5s ease-out;
-            margin-bottom: clamp(60px, 15vw, 80px); /* Space for navigation */
-            max-height: calc(100vh - clamp(80px, 20vw, 120px));
-            overflow-y: auto;
         }
 
         .slide.active {
             display: block;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(clamp(10px, 3vw, 20px));
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        /* Typography Hierarchy */
         h1 {
-            font-size: clamp(1.5rem, 6vw, 3rem);
-            color: var(--neon-pink);
-            text-shadow: 0 0 clamp(5px, 2vw, 10px) var(--neon-pink);
-            margin-bottom: clamp(0.5rem, 3vw, 1rem);
-            text-transform: uppercase;
-            letter-spacing: clamp(1px, 0.5vw, 2px);
+            font-size: clamp(1.75rem, 4vw, 3rem);
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 1.5rem;
             line-height: 1.2;
-            word-break: break-word;
         }
 
         h2 {
-            font-size: clamp(1.2rem, 4.5vw, 2rem);
-            color: var(--neon-green);
-            text-shadow: 0 0 clamp(4px, 1.5vw, 8px) var(--neon-green);
-            margin-bottom: clamp(1rem, 3vw, 1.5rem);
+            font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 1.25rem;
             line-height: 1.3;
-            word-break: break-word;
         }
 
         h3 {
-            font-size: clamp(1rem, 3.5vw, 1.5rem);
-            color: var(--neon-blue);
-            text-shadow: 0 0 clamp(3px, 1vw, 6px) var(--neon-blue);
-            margin-bottom: clamp(0.5rem, 2vw, 1rem);
-            line-height: 1.3;
-            word-break: break-word;
+            font-size: clamp(1.25rem, 3vw, 2rem);
+            font-weight: 500;
+            color: #333333;
+            margin-bottom: 1rem;
+            line-height: 1.4;
         }
 
         p, li {
-            font-size: clamp(0.875rem, 3vw, 1.1rem);
-            line-height: 1.5;
-            margin-bottom: clamp(0.5rem, 2vw, 0.8rem);
-            word-wrap: break-word;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: #444444;
+            margin-bottom: 0.75rem;
+            max-width: 65ch;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .code-block {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid var(--neon-green);
-            border-radius: clamp(3px, 1vw, 5px);
-            padding: clamp(0.75rem, 3vw, 1rem);
-            margin: clamp(0.75rem, 3vw, 1rem) 0;
-            font-family: 'Courier New', monospace;
-            text-align: left;
-            overflow-x: auto;
-            white-space: pre-wrap;
-            color: var(--neon-green);
-            text-shadow: 0 0 clamp(2px, 1vw, 5px) var(--neon-green);
-            font-size: clamp(0.75rem, 2.5vw, 0.95rem);
-            max-width: 100%;
-            word-break: break-all;
-            scrollbar-width: thin;
-            scrollbar-color: var(--neon-green) rgba(0, 0, 0, 0.3);
-        }
-
-        .code-block::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .code-block::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        .code-block::-webkit-scrollbar-thumb {
-            background: var(--neon-green);
-            border-radius: 3px;
-        }
-
-        .highlight {
-            color: var(--neon-pink);
-            font-weight: bold;
-            text-shadow: 0 0 clamp(2px, 1vw, 5px) var(--neon-pink);
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: 1fr; /* Mobile-first: 1 column */
-            gap: clamp(0.75rem, 3vw, 1rem);
-            margin: clamp(0.75rem, 3vw, 1rem) 0;
-        }
-
-        /* Progressive enhancement for larger screens */
-        @media (min-width: 480px) {
-            .feature-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 768px) {
-            .feature-grid {
-                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            }
-        }
-
-        .feature-card {
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid var(--neon-blue);
-            border-radius: clamp(3px, 1vw, 5px);
-            padding: clamp(0.75rem, 3vw, 1rem);
-            text-align: left;
-            word-wrap: break-word;
-        }
-
-        .navigation {
-            position: fixed;
-            bottom: clamp(10px, 3vw, 20px);
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: clamp(8px, 2vw, 10px);
-            z-index: 1000;
-        }
-
-        .nav-btn {
-            background: rgba(0, 255, 255, 0.2);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: clamp(12px, 3vw, 16px) clamp(16px, 4vw, 24px);
-            border-radius: clamp(3px, 1vw, 5px);
-            cursor: pointer;
-            font-family: 'Courier New', monospace;
-            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
-            transition: all 0.3s ease;
-            min-height: 44px; /* Touch-friendly minimum */
-            min-width: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            touch-action: manipulation; /* Prevent zoom on double tap */
-        }
-
-        .nav-btn:hover,
-        .nav-btn:focus {
-            background: rgba(0, 255, 255, 0.4);
-            box-shadow: 0 0 clamp(5px, 2vw, 10px) var(--neon-blue);
-            outline: none;
-        }
-
-        .nav-btn:active {
-            transform: scale(0.95);
-        }
-
-        .slide-counter {
-            position: fixed;
-            top: clamp(10px, 3vw, 20px);
-            right: clamp(10px, 3vw, 20px);
-            color: var(--neon-blue);
-            font-size: clamp(0.75rem, 2.5vw, 1rem);
-            font-family: 'Courier New', monospace;
-            background: rgba(0, 0, 0, 0.6);
-            padding: clamp(4px, 1vw, 8px) clamp(8px, 2vw, 12px);
-            border-radius: clamp(3px, 1vw, 5px);
-            border: 1px solid var(--neon-blue);
-        }
-
-        .emoji {
-            font-size: 1.2em;
-            margin: 0 0.1em;
-        }
-
+        /* Lists */
         ul {
             text-align: left;
-            margin: clamp(0.75rem, 3vw, 1rem) 0;
-            padding-left: clamp(1rem, 4vw, 2rem);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         li {
-            margin-bottom: clamp(0.25rem, 1vw, 0.5rem);
+            margin-bottom: 0.5rem;
+            margin-left: 0;
+            margin-right: 0;
         }
 
-        .table-responsive {
-            overflow-x: auto;
-            margin: clamp(0.75rem, 3vw, 1rem) 0;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-            scrollbar-color: var(--neon-blue) rgba(0, 0, 0, 0.3);
-        }
-
-        .table-responsive::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .table-responsive::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        .table-responsive::-webkit-scrollbar-thumb {
-            background: var(--neon-blue);
+        /* Code and Commands */
+        code {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            background-color: #f5f5f5;
+            padding: 0.2em 0.4em;
             border-radius: 3px;
+            font-size: 0.9em;
+            color: #000000;
         }
 
+        .command {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: clamp(1.1rem, 2.8vw, 1.5rem);
+            color: #000000;
+            background-color: #f8f8f8;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            margin: 1rem auto;
+            display: inline-block;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Principle Numbers */
+        .principle-number {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 700;
+            color: #666666;
+            margin-bottom: 1rem;
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e0e0e0;
+        }
+
+        .nav-button {
+            width: 44px;
+            height: 44px;
+            border: none;
+            background-color: #f5f5f5;
+            color: #333333;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+
+        .nav-button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .nav-button:disabled:hover {
+            background-color: #f5f5f5;
+        }
+
+        .slide-counter {
+            font-size: 0.9rem;
+            color: #666666;
+            font-weight: 500;
+            min-width: 60px;
+        }
+
+        /* Table Styles */
         table {
             width: 100%;
-            min-width: 300px; /* Ensure minimum readable width */
             border-collapse: collapse;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid var(--neon-blue);
+            margin: 1.5rem 0;
+            font-size: clamp(0.9rem, 2.2vw, 1.1rem);
         }
 
         th, td {
-            border: 1px solid var(--neon-blue);
-            padding: clamp(0.5rem, 2vw, 0.8rem);
+            padding: 0.75rem;
             text-align: left;
-            font-size: clamp(0.75rem, 2.5vw, 0.9rem);
-            word-wrap: break-word;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         th {
-            background: rgba(0, 255, 255, 0.2);
-            color: var(--neon-blue);
-            font-weight: bold;
+            font-weight: 600;
+            color: #000000;
+            background-color: #f8f8f8;
         }
 
-        .glow-text {
-            animation: glow 2s ease-in-out infinite alternate;
+        td {
+            color: #444444;
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 clamp(2px, 1vw, 5px) currentColor; }
-            to { text-shadow: 0 0 clamp(10px, 3vw, 20px) currentColor; }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .slide-container {
+                padding: 1rem;
+            }
+
+            .navigation {
+                bottom: 1rem;
+                padding: 0.5rem 1rem;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 0.5rem 0.25rem;
+            }
         }
 
-        /* Enhanced mobile responsiveness */
         @media (max-width: 480px) {
+            .slide-container {
+                padding: 0.75rem;
+            }
+
+            h1, h2, h3 {
+                text-align: left;
+            }
+
             .slide {
-                padding: clamp(0.75rem, 3vw, 1rem);
-                margin-bottom: 70px;
+                text-align: left;
             }
-            
-            .navigation {
-                bottom: 8px;
-                gap: 6px;
-            }
-            
-            .nav-btn {
-                padding: 10px 14px;
-                font-size: 0.7rem;
-                min-height: 44px;
-                min-width: 44px;
-            }
-            
-            .feature-grid {
-                gap: 0.5rem;
-            }
-            
-            .code-block {
-                font-size: 0.7rem;
-                padding: 0.6rem;
-            }
-            
-            .slide-counter {
-                font-size: 0.7rem;
-                padding: 4px 6px;
+
+            .command {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
             }
         }
 
-        @media (max-width: 320px) {
+        /* Print Styles */
+        @media print {
             body {
-                font-size: 14px;
+                background: white;
+                font-size: 12pt;
+                line-height: 1.4;
             }
-            
-            .slide {
-                padding: 0.5rem;
-                margin-bottom: 65px;
-            }
-            
-            h1 {
-                font-size: clamp(1.2rem, 8vw, 2rem);
-                line-height: 1.1;
-                margin-bottom: 0.5rem;
-            }
-            
-            h2 {
-                font-size: clamp(1rem, 6vw, 1.5rem);
-                line-height: 1.2;
-            }
-            
-            h3 {
-                font-size: clamp(0.9rem, 5vw, 1.2rem);
-            }
-            
-            .nav-btn {
-                padding: 8px 12px;
-                font-size: 0.65rem;
-                gap: 4px;
-            }
-            
-            .feature-card {
-                padding: 0.5rem;
-            }
-            
-            .code-block {
-                font-size: 0.65rem;
-                padding: 0.5rem;
-            }
-        }
 
-        /* Landscape mobile orientation */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .slide {
-                max-height: calc(100vh - 60px);
-                padding: 0.5rem;
-            }
-            
             .navigation {
-                bottom: 5px;
+                display: none;
             }
-            
-            .slide-counter {
-                top: 5px;
-                right: 5px;
-                font-size: 0.7rem;
+
+            .slide {
+                display: block !important;
+                page-break-after: always;
+                margin-bottom: 2rem;
+                padding: 1rem;
+            }
+
+            .slide:last-child {
+                page-break-after: auto;
+            }
+
+            h1, h2, h3 {
+                color: black;
+            }
+
+            .command {
+                background: #f0f0f0;
+                border: 1px solid #ccc;
             }
         }
 
-        /* High DPI displays */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .nav-btn {
-                min-height: 48px;
-                min-width: 48px;
-            }
-        }
-
-        /* Accessibility improvements */
+        /* Accessibility */
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
-            
-            body::before {
-                animation: none;
+        }
+
+        /* High Contrast Support */
+        @media (prefers-contrast: high) {
+            body {
+                background: white;
+                color: black;
             }
-        }
 
-        /* Focus indicators for keyboard navigation */
-        .nav-btn:focus-visible {
-            outline: 2px solid var(--neon-blue);
-            outline-offset: 2px;
-        }
+            .nav-button {
+                border: 2px solid black;
+            }
 
-        /* Prevent zoom on form inputs (iOS Safari) */
-        input, textarea, select {
-            font-size: 16px;
+            .command {
+                border: 2px solid black;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="presentation-container">
-        <div class="slide-counter">
-            <span id="current-slide">1</span> / <span id="total-slides">15</span>
-        </div>
-
-        <!-- Slide 1: Title -->
-        <div class="slide active">
-            <h1 class="glow-text">🚀 Copilot CLI</h1>
-            <h2>Slash Commands & Agentic Workflows</h2>
-            <h3>The Future of Development is Here</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🤖 AI-Powered</h3>
-                    <p>Natural language meets powerful automation</p>
-                </div>
-                <div class="feature-card">
-                    <h3>⚡ Slash Commands</h3>
-                    <p>Predictable, powerful, always consistent</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🔄 Agentic Workflows</h3>
-                    <p>Background agents that actually work</p>
-                </div>
+    <div class="presentation" role="main">
+        <div class="slide-container">
+            <!-- Slide 1: Title -->
+            <div class="slide active" id="slide-1">
+                <h1>Copilot CLI: Principles & Workflows</h1>
+                <p>A practical guide to agentic development patterns</p>
             </div>
-        </div>
 
-        <!-- Slide 2: What is Copilot CLI? -->
-        <div class="slide">
-            <h2>🤖 What is Copilot CLI?</h2>
-            <h3>Your AI Development Partner</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>💬 Conversational Interface</h3>
-                    <p>Talk to your tools naturally</p>
-                </div>
-                <div class="feature-card">
-                    <h3>⚡ Slash Commands</h3>
-                    <p>Predictable, powerful actions</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🤖 Agentic Workflows</h3>
-                    <p>Work in the background</p>
-                </div>
-                <div class="feature-card">
-                    <h3>💾 Session Persistence</h3>
-                    <p>Never lose context</p>
-                </div>
+            <!-- Slide 2: Accessibility & Clarity -->
+            <div class="slide" id="slide-2">
+                <div class="principle-number">01</div>
+                <h2>Accessibility & Clarity of Slash Commands</h2>
+                <p>Commands should be self-documenting and discoverable</p>
+                <div class="command">/help [command]</div>
+                <ul>
+                    <li>Clear, consistent naming conventions</li>
+                    <li>Built-in help and examples</li>
+                    <li>Predictable parameter patterns</li>
+                    <li>Graceful error handling with suggestions</li>
+                </ul>
             </div>
-            <div class="code-block">copilot> /help
-# Welcome to the future of development</div>
-        </div>
 
-        <!-- Slide 3: Slash Commands Overview -->
-        <div class="slide">
-            <h2>⚡ Slash Commands Overview</h2>
-            <h3>Predictable Power at Your Fingertips</h3>
-            <ul>
-                <li><span class="highlight">Always work the same way</span> - no syntax variations</li>
-                <li><span class="highlight">Discoverable</span> - tab completion shows options</li>
-                <li><span class="highlight">Composable</span> - chain them together</li>
-                <li><span class="highlight">Reliable</span> - consistent behavior every time</li>
-            </ul>
-            <div class="code-block">copilot> /model gpt-4
-copilot> /add-dir /src/components
-copilot> /fleet "optimize these React components"</div>
-            <p><span class="highlight">The Magic:</span> Natural language + structured commands = unlimited power</p>
-        </div>
-
-        <!-- Slide 4: Session Management -->
-        <div class="slide">
-            <h2>🎯 Session Management</h2>
-            <h3>Control Your Context</h3>
-            <div class="code-block">/clear           # Fresh start, clear conversation
-/session save    # Bookmark your current context  
-/session load    # Resume where you left off
-/resume          # Quick context restoration
-/exit            # Clean shutdown</div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>💾 Save Before Changes</h3>
-                    <p>Bookmark important contexts</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🔄 Resume Complex Sessions</h3>
-                    <p>Pick up where you left off</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🆕 Clear for New Projects</h3>
-                    <p>Fresh start when switching</p>
-                </div>
+            <!-- Slide 3: Shipping Velocity -->
+            <div class="slide" id="slide-3">
+                <div class="principle-number">02</div>
+                <h2>Shipping Velocity Matters</h2>
+                <p>Speed of iteration trumps perfection</p>
+                <div class="command">/quick-deploy --env staging</div>
+                <ul>
+                    <li>Default to safe, fast actions</li>
+                    <li>Minimize confirmation prompts</li>
+                    <li>Optimize for common workflows</li>
+                    <li>Enable rapid prototyping and testing</li>
+                </ul>
             </div>
-        </div>
 
-        <!-- Slide 5: File & Directory Access -->
-        <div class="slide">
-            <h2>📁 File & Directory Access</h2>
-            <h3>Your Codebase, Instantly Available</h3>
-            <div class="code-block">/add-dir /src/components    # Add directory to context
-/add-dir /tests --recursive # Include subdirectories  
-/list-dirs                  # See what's loaded
-/cwd /project/frontend      # Change working directory
-/remove-dir /old-code       # Clean up context</div>
-            <ul>
-                <li>🎯 <span class="highlight">Only loads what you need</span></li>
-                <li>🚫 <span class="highlight">Respects .gitignore</span> by default</li>
-                <li>⚡ <span class="highlight">Blazing fast</span> file operations</li>
-                <li>🔄 <span class="highlight">Automatic change detection</span></li>
-            </ul>
-        </div>
-
-        <!-- Slide 6: Configuration -->
-        <div class="slide">
-            <h2>⚙️ Configuration That Works</h2>
-            <h3>Customize Your Experience</h3>
-            <div class="code-block">/model claude-3.5-sonnet    # Switch AI models
-/model --list               # See available options
-
-/theme neon-cyber           # Visual styling
-/theme dark-minimal         # Clean interface
-
-/terminal-setup            # Optimize shell integration
-/terminal-setup --zsh      # Shell-specific config</div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>✅ Sane Defaults</h3>
-                    <p>Works great out of the box</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🎨 Easy Customization</h3>
-                    <p>When you need it</p>
-                </div>
-                <div class="feature-card">
-                    <h3>📁 Per-Project Overrides</h3>
-                    <p>Different configs for different projects</p>
-                </div>
+            <!-- Slide 4: Humans on the Loop -->
+            <div class="slide" id="slide-4">
+                <div class="principle-number">03</div>
+                <h2>Humans on the Loop, Agents in the Loop</h2>
+                <p>Strategic oversight with tactical automation</p>
+                <div class="command">/review --auto-assign</div>
+                <ul>
+                    <li>Human approval for critical decisions</li>
+                    <li>Agents handle routine execution</li>
+                    <li>Clear escalation paths</li>
+                    <li>Audit trails for all actions</li>
+                </ul>
             </div>
-        </div>
 
-        <!-- Slide 7: Agentic Workflows -->
-        <div class="slide">
-            <h2>🤖 Agentic Workflows</h2>
-            <h3>The Game Changer</h3>
-            <div class="code-block">/fleet "refactor these 10 components"
-# → Spawns parallel agents for each component
-
-/delegate "research best practices for React hooks"  
-# → Background research while you keep coding
-
-/research --deep "compare state management solutions"
-# → Deep investigation with expert analysis</div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>⚡ Parallel Processing</h3>
-                    <p>Multiple tasks simultaneously</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🔄 Background Execution</h3>
-                    <p>Doesn't block your work</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🎯 Expert-Level Analysis</h3>
-                    <p>On demand, when you need it</p>
-                </div>
+            <!-- Slide 5: Token Economics -->
+            <div class="slide" id="slide-5">
+                <div class="principle-number">04</div>
+                <h2>Tokens Are Cheaper Than People</h2>
+                <p>Leverage AI for tasks that scale with attention</p>
+                <div class="command">/analyze --depth comprehensive</div>
+                <ul>
+                    <li>Automate repetitive analysis</li>
+                    <li>Generate first drafts and outlines</li>
+                    <li>Batch process similar tasks</li>
+                    <li>Focus human time on creative decisions</li>
+                </ul>
             </div>
-        </div>
 
-        <!-- Slide 8: Fleet -->
-        <div class="slide">
-            <h2>⚡ Fleet - Parallel Powerhouse</h2>
-            <h3>Divide and Conquer</h3>
-            <div class="code-block">copilot> /fleet "optimize these API endpoints"
-🚀 Spawning 5 agents for parallel optimization...
-  
-Agent 1: /api/users → Response time improved 40%
-Agent 2: /api/posts → Added caching layer  
-Agent 3: /api/auth → Reduced DB queries by 60%
-Agent 4: /api/files → Implemented streaming
-Agent 5: /api/search → Added proper indexing
-
-✅ All optimizations complete in 3 minutes</div>
-            <p><span class="highlight">Perfect For:</span> Code reviews, refactoring, testing approaches, batch operations</p>
-        </div>
-
-        <!-- Slide 9: Delegate -->
-        <div class="slide">
-            <h2>🎯 Delegate - Background Brilliance</h2>
-            <h3>Work While You Work</h3>
-            <div class="code-block">copilot> /delegate "research GraphQL vs tRPC for our API rewrite"
-
-# You continue coding...
-# Meanwhile, agent researches in background
-
-[30 minutes later]
-🔔 Research Complete: GraphQL vs tRPC Analysis Ready
-📊 Comprehensive comparison with recommendations</div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🔍 Research While You Code</h3>
-                    <p>Background investigation</p>
-                </div>
-                <div class="feature-card">
-                    <h3>📚 Documentation Generation</h3>
-                    <p>Automatic docs creation</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🔒 Security Audits</h3>
-                    <p>Continuous security analysis</p>
-                </div>
+            <!-- Slide 6: Fleet Patterns -->
+            <div class="slide" id="slide-6">
+                <h2>/fleet: Parallelization Patterns</h2>
+                <p>Distribute work across multiple agents simultaneously</p>
+                <div class="command">/fleet deploy --services api,web,worker</div>
+                <ul>
+                    <li>Parallel execution reduces total time</li>
+                    <li>Independent agent contexts prevent conflicts</li>
+                    <li>Aggregated results and status reporting</li>
+                    <li>Fault isolation and recovery</li>
+                </ul>
             </div>
-        </div>
 
-        <!-- Slide 10: Research -->
-        <div class="slide">
-            <h2>🔬 Research - Deep Investigation</h2>
-            <h3>Expert-Level Analysis</h3>
-            <div class="code-block">/research --deep "microservices architecture patterns"
-
-📋 Research Plan:
-1. Industry best practices analysis
-2. Performance benchmarks
-3. Cost-benefit analysis  
-4. Implementation roadmap
-5. Risk assessment
-
-🎯 Estimated completion: 45 minutes</div>
-            <ul>
-                <li>🔍 <span class="highlight">Multi-source analysis</span></li>
-                <li>🎯 <span class="highlight">Expert recommendations</span></li>
-                <li>💡 <span class="highlight">Actionable insights</span></li>
-                <li>📚 <span class="highlight">Referenced documentation</span></li>
-            </ul>
-        </div>
-
-        <!-- Slide 11: Advanced Capabilities -->
-        <div class="slide">
-            <h2>🚀 Advanced Capabilities</h2>
-            <h3>Enterprise-Ready Features</h3>
-            <div class="code-block"># MCP Connections
-/connect database-mcp     # Connect to database tools
-/connect cloud-mcp        # Cloud service integration  
-/list-connections         # See active MCPs
-
-# Tool Permissions
-/allow-all               # Trust all tools (use carefully)
-/permissions --list      # Review current permissions
-/revoke tool-name        # Remove tool access</div>
-            <p><span class="highlight">Advanced Workflows:</span> Custom integrations, API orchestration, cross-service automation</p>
-        </div>
-
-        <!-- Slide 12: Practical Examples -->
-        <div class="slide">
-            <h2>💡 Practical Workflow Examples</h2>
-            <h3>Real-World Patterns</h3>
-            <div class="code-block"># Research → Delegate Pattern
-/research "React state management 2024"
-/delegate "create Redux toolkit setup with TypeScript"
-# Both complete in background
-
-# Fleet for Parallel Work
-/fleet "add TypeScript types to these components"
-/fleet "add unit tests for these utilities"  
-/fleet "update documentation for these APIs"</div>
-            <p><span class="highlight">Result:</span> Maximum productivity through intelligent task distribution</p>
-        </div>
-
-        <!-- Slide 13: Why This Matters -->
-        <div class="slide">
-            <h2>🎯 Why This Matters</h2>
-            <h3>The Productivity Multiplier</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Before Copilot CLI</h3>
-                    <ul>
-                        <li>Manual context switching</li>
-                        <li>Fragmented tool usage</li>
-                        <li>Sequential task processing</li>
-                        <li>Limited AI assistance</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <h3>After Copilot CLI</h3>
-                    <ul>
-                        <li class="highlight">⚡ 10x faster research</li>
-                        <li class="highlight">🔄 Parallel processing</li>
-                        <li class="highlight">🎯 Zero context loss</li>
-                        <li class="highlight">🚀 Compound productivity</li>
-                    </ul>
-                </div>
+            <!-- Slide 7: Delegate Workflows -->
+            <div class="slide" id="slide-7">
+                <h2>/delegate: Background Agent Workflows</h2>
+                <p>Hand off complex tasks to specialized agents</p>
+                <div class="command">/delegate code-review --pr 123</div>
+                <ul>
+                    <li>Asynchronous task execution</li>
+                    <li>Specialized agent capabilities</li>
+                    <li>Progress notifications and updates</li>
+                    <li>Result delivery when complete</li>
+                </ul>
             </div>
-            <p><span class="highlight glow-text">You focus on architecture and creativity, AI handles the grunt work.</span></p>
-        </div>
 
-        <!-- Slide 14: Getting Started -->
-        <div class="slide">
-            <h2>🚀 Getting Started</h2>
-            <h3>Quick Reference</h3>
-            <div class="table-responsive">
+            <!-- Slide 8: Research Workflows -->
+            <div class="slide" id="slide-8">
+                <h2>/research: Deep Investigation with Citations</h2>
+                <p>Comprehensive analysis with source tracking</p>
+                <div class="command">/research security-vulnerabilities --codebase</div>
+                <ul>
+                    <li>Multi-source information gathering</li>
+                    <li>Citation tracking and verification</li>
+                    <li>Structured report generation</li>
+                    <li>Confidence scoring for findings</li>
+                </ul>
+            </div>
+
+            <!-- Slide 9: Task Orchestration -->
+            <div class="slide" id="slide-9">
+                <h2>/tasks: Monitoring and Orchestration</h2>
+                <p>Coordinate complex multi-step workflows</p>
+                <div class="command">/tasks status --pipeline ci-cd</div>
+                <ul>
+                    <li>Dependency management between tasks</li>
+                    <li>Real-time status monitoring</li>
+                    <li>Failure detection and recovery</li>
+                    <li>Resource allocation optimization</li>
+                </ul>
+            </div>
+
+            <!-- Slide 10: Practical Examples -->
+            <div class="slide" id="slide-10">
+                <h2>Practical Examples</h2>
+                <p>Real-world workflow combinations</p>
+                <div class="command">/fleet test --parallel<br>/delegate documentation --auto<br>/research performance --benchmark</div>
+                <ul>
+                    <li><strong>Release Pipeline:</strong> Test, build, and deploy in parallel</li>
+                    <li><strong>Code Review:</strong> Automated analysis with human oversight</li>
+                    <li><strong>Documentation:</strong> Generate and update docs automatically</li>
+                    <li><strong>Performance:</strong> Continuous benchmarking and optimization</li>
+                </ul>
+            </div>
+
+            <!-- Slide 11: Quick Reference -->
+            <div class="slide" id="slide-11">
+                <h2>Quick Reference</h2>
                 <table>
                     <thead>
                         <tr>
                             <th>Command</th>
-                            <th>Usage</th>
                             <th>Purpose</th>
+                            <th>Execution</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>/help</td><td>Get started</td><td>Show available commands</td></tr>
-                        <tr><td>/model</td><td>/model gpt-4</td><td>Switch AI models</td></tr>
-                        <tr><td>/add-dir</td><td>/add-dir /src</td><td>Add code to context</td></tr>
-                        <tr><td>/fleet</td><td>/fleet "task"</td><td>Parallel execution</td></tr>
-                        <tr><td>/delegate</td><td>/delegate "research X"</td><td>Background work</td></tr>
-                        <tr><td>/research</td><td>/research --deep "topic"</td><td>Expert analysis</td></tr>
-                        <tr><td>/session save</td><td>Save context</td><td>Preserve your work</td></tr>
+                        <tr>
+                            <td><code>/fleet</code></td>
+                            <td>Parallel execution</td>
+                            <td>Multiple agents</td>
+                        </tr>
+                        <tr>
+                            <td><code>/delegate</code></td>
+                            <td>Background tasks</td>
+                            <td>Single specialized agent</td>
+                        </tr>
+                        <tr>
+                            <td><code>/research</code></td>
+                            <td>Deep analysis</td>
+                            <td>Research-focused agent</td>
+                        </tr>
+                        <tr>
+                            <td><code>/tasks</code></td>
+                            <td>Orchestration</td>
+                            <td>Workflow coordinator</td>
+                        </tr>
+                        <tr>
+                            <td><code>/monitor</code></td>
+                            <td>Status tracking</td>
+                            <td>Continuous observation</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="code-block">copilot> /help
-copilot> /add-dir /your-project
-copilot> /fleet "analyze code quality"</div>
-        </div>
 
-        <!-- Slide 15: The Future is Now -->
-        <div class="slide">
-            <h1 class="glow-text">🌟 The Future is Now</h1>
-            <h2>Ready to Transform Your Workflow?</h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>1️⃣ Install</h3>
-                    <p>Copilot CLI</p>
-                </div>
-                <div class="feature-card">
-                    <h3>2️⃣ Run</h3>
-                    <p><code>/help</code> to explore</p>
-                </div>
-                <div class="feature-card">
-                    <h3>3️⃣ Try</h3>
-                    <p>A simple fleet command</p>
-                </div>
-                <div class="feature-card">
-                    <h3>4️⃣ Experience</h3>
-                    <p>The productivity boost</p>
-                </div>
+            <!-- Slide 12: Getting Started -->
+            <div class="slide" id="slide-12">
+                <h2>Getting Started</h2>
+                <ul>
+                    <li><strong>Start Simple:</strong> Begin with single commands</li>
+                    <li><strong>Build Workflows:</strong> Chain commands for complex tasks</li>
+                    <li><strong>Set Boundaries:</strong> Define approval gates for critical actions</li>
+                    <li><strong>Monitor Results:</strong> Review and refine agent outputs</li>
+                    <li><strong>Scale Gradually:</strong> Add parallelization as confidence grows</li>
+                </ul>
+                <div class="command">/help getting-started</div>
             </div>
-            <div class="code-block">🔗 GitHub: github.com/copilot-cli
-📚 Docs: docs.copilot-cli.dev  
-💬 Community: discord.gg/copilot-cli</div>
-            <h2 class="glow-text">🚀 Welcome to the future of development!</h2>
-        </div>
-    </div>
 
-    <div class="navigation">
-        <button class="nav-btn" onclick="previousSlide()" aria-label="Previous slide">← Previous</button>
-        <button class="nav-btn" onclick="nextSlide()" aria-label="Next slide">Next →</button>
+            <!-- Slide 13: Why This Matters -->
+            <div class="slide" id="slide-13">
+                <h2>Why This Matters</h2>
+                <h3>Productivity Multiplier</h3>
+                <ul>
+                    <li><strong>10x Developer:</strong> Not just faster coding, but faster thinking</li>
+                    <li><strong>Reduced Context Switching:</strong> Agents maintain focus while you strategize</li>
+                    <li><strong>Quality Consistency:</strong> Automated best practices and reviews</li>
+                    <li><strong>Knowledge Scaling:</strong> Capture and replicate expert workflows</li>
+                    <li><strong>Error Reduction:</strong> Systematic validation and testing</li>
+                </ul>
+            </div>
+
+            <!-- Slide 14: Call to Action -->
+            <div class="slide" id="slide-14">
+                <h2>Start Building</h2>
+                <p>Your next project begins with a command</p>
+                <div class="command">/delegate setup --project new-app</div>
+                <ul>
+                    <li>Identify your most time-consuming workflows</li>
+                    <li>Start with one automated task</li>
+                    <li>Measure the time savings</li>
+                    <li>Gradually expand agent capabilities</li>
+                    <li>Share patterns with your team</li>
+                </ul>
+            </div>
+
+            <!-- Slide 15: Thank You -->
+            <div class="slide" id="slide-15">
+                <h1>Thank You</h1>
+                <h3>Questions?</h3>
+                <p>Ready to transform your development workflow</p>
+                <div class="command">/fleet questions --parallel</div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="navigation" role="navigation" aria-label="Slide navigation">
+            <button class="nav-button" id="prev-btn" onclick="changeSlide(-1)" aria-label="Previous slide">‹</button>
+            <div class="slide-counter" id="slide-counter" role="status" aria-live="polite">1 / 15</div>
+            <button class="nav-button" id="next-btn" onclick="changeSlide(1)" aria-label="Next slide">›</button>
+        </nav>
     </div>
 
     <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
-        
-        document.getElementById('total-slides').textContent = totalSlides;
+        let currentSlide = 1;
+        const totalSlides = 15;
 
-        function showSlide(n) {
-            slides.forEach(slide => slide.classList.remove('active'));
-            currentSlide = (n + totalSlides) % totalSlides;
-            slides[currentSlide].classList.add('active');
-            document.getElementById('current-slide').textContent = currentSlide + 1;
+        function updateSlide() {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            // Show current slide
+            document.getElementById(`slide-${currentSlide}`).classList.add('active');
+            
+            // Update counter
+            document.getElementById('slide-counter').textContent = `${currentSlide} / ${totalSlides}`;
+            
+            // Update button states
+            document.getElementById('prev-btn').disabled = currentSlide === 1;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+            
+            // Update URL hash for bookmarking
+            window.location.hash = `slide-${currentSlide}`;
         }
 
-        function nextSlide() {
-            showSlide(currentSlide + 1);
-        }
-
-        function previousSlide() {
-            showSlide(currentSlide - 1);
+        function changeSlide(direction) {
+            const newSlide = currentSlide + direction;
+            if (newSlide >= 1 && newSlide <= totalSlides) {
+                currentSlide = newSlide;
+                updateSlide();
+            }
         }
 
         // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
-                nextSlide();
-                e.preventDefault();
-            } else if (e.key === 'ArrowLeft') {
-                previousSlide();
-                e.preventDefault();
-            } else if (e.key === 'Home') {
-                showSlide(0);
-                e.preventDefault();
-            } else if (e.key === 'End') {
-                showSlide(totalSlides - 1);
-                e.preventDefault();
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                    changeSlide(-1);
+                    break;
+                case 'ArrowRight':
+                case 'ArrowDown':
+                case ' ': // Spacebar
+                    e.preventDefault();
+                    changeSlide(1);
+                    break;
+                case 'Home':
+                    currentSlide = 1;
+                    updateSlide();
+                    break;
+                case 'End':
+                    currentSlide = totalSlides;
+                    updateSlide();
+                    break;
             }
         });
 
-        // Enhanced touch navigation for mobile
+        // Initialize from URL hash
+        function initializeFromHash() {
+            const hash = window.location.hash;
+            const slideMatch = hash.match(/slide-(\d+)/);
+            if (slideMatch) {
+                const slideNum = parseInt(slideMatch[1]);
+                if (slideNum >= 1 && slideNum <= totalSlides) {
+                    currentSlide = slideNum;
+                }
+            }
+            updateSlide();
+        }
+
+        // Touch/swipe support
         let touchStartX = 0;
         let touchEndX = 0;
-        let touchStartY = 0;
-        let touchEndY = 0;
 
-        document.addEventListener('touchstart', function(e) {
+        document.addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
-            touchStartY = e.changedTouches[0].screenY;
-        }, { passive: true });
+        });
 
-        document.addEventListener('touchend', function(e) {
+        document.addEventListener('touchend', (e) => {
             touchEndX = e.changedTouches[0].screenX;
-            touchEndY = e.changedTouches[0].screenY;
             handleSwipe();
-        }, { passive: true });
+        });
 
         function handleSwipe() {
             const swipeThreshold = 50;
-            const diffX = touchStartX - touchEndX;
-            const diffY = Math.abs(touchStartY - touchEndY);
+            const swipeDistance = touchEndX - touchStartX;
             
-            // Only handle horizontal swipes (not vertical scrolling)
-            if (Math.abs(diffX) > swipeThreshold && diffY < 100) {
-                if (diffX > 0) {
-                    nextSlide(); // Swipe left - next slide
+            if (Math.abs(swipeDistance) > swipeThreshold) {
+                if (swipeDistance > 0) {
+                    changeSlide(-1); // Swipe right = previous
                 } else {
-                    previousSlide(); // Swipe right - previous slide
+                    changeSlide(1);  // Swipe left = next
                 }
             }
         }
 
-        // Prevent bounce/overscroll on iOS
-        document.addEventListener('touchmove', function(e) {
-            if (e.target === document.body || e.target === document.documentElement) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+        // Initialize presentation
+        document.addEventListener('DOMContentLoaded', initializeFromHash);
 
-        // Initialize
-        showSlide(0);
+        // Handle browser back/forward
+        window.addEventListener('hashchange', initializeFromHash);
+
+        // Focus management for accessibility
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                // Ensure navigation stays focusable
+                const navigation = document.querySelector('.navigation');
+                const focusableElements = navigation.querySelectorAll('button:not(:disabled)');
+                
+                if (document.activeElement === focusableElements[focusableElements.length - 1] && !e.shiftKey) {
+                    e.preventDefault();
+                    focusableElements[0].focus();
+                } else if (document.activeElement === focusableElements[0] && e.shiftKey) {
+                    e.preventDefault();
+                    focusableElements[focusableElements.length - 1].focus();
+                }
+            }
+        });
     </script>
 </body>
 </html>
